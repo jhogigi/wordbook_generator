@@ -1,0 +1,23 @@
+version: '3'
+services:
+  python:
+    build: .
+    working_dir: '/usr/local/src'
+    ports:
+      - "8000:8000"
+    tty: true
+    volumes:
+      - .:/usr/local/src
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:12
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres
+  rabbitmq:
+    image: rabbitmq:3.9-management
+    ports:
+      - '5672:5672'
+      - '15672:15672'
