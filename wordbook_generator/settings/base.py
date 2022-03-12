@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import environ
@@ -21,6 +22,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     'django_celery_results',
+
+    'file_manager'
 ]
 
 MIDDLEWARE = [
@@ -81,6 +84,8 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
