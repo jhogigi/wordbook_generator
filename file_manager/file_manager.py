@@ -2,7 +2,6 @@ from typing import List, Callable, TypeVar, Generic, Any
 
 from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
-from file_manager.models import TaskFiles
 
 
 File = TypeVar('File')
@@ -47,11 +46,6 @@ class FileManager(Generic[File]):
     @classmethod
     def delete(cls, file_path):
         default_storage.delete(file_path)
-
-    @classmethod
-    def get_original_file_path(cls, task_id: str) -> str:
-        instance = TaskFiles.objects.get(task_id=task_id)
-        return instance.original_file_path
 
     def __str__(self) -> str:
         return f'{self.file_path}'

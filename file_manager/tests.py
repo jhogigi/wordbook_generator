@@ -1,20 +1,37 @@
+import os
+
 from django.test import TestCase
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
 from file_manager.file_manager import FileManager
-from file_manager.models import TaskFiles
+from file_manager.models import Task
 
 
 class FileManagerViewTest(TestCase):
     def test_upload(self):
+        with open('file_manager/test.txt', 'w') as f:
+            f.write('ABC')
         with open('file_manager/test.txt') as f:
             response = self.client.post('/file_upload/', {'original_file': f})
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(TaskFiles.objects.all().count(), 1)
+        self.assertEqual(Task.objects.all().count(), 1)
+        os.remove('file_manager/test.txt')
 
 
-class TestFileManager(TestCase):
+class TaskTest(TestCase):
+    def test_create(self):
+        instance = Task.objects.create(original_file_path="test.txt")
+        self.assertTrue(instance.original_file_path)
+        self.assertTrue(instance.task_id)
+
+    def test_get_instance_by_task_id(self):
+        instance = Task.objects.create(original_file_path="test.txt")
+        actual = Task.get_instance_by_task_id(instance.task_id)
+        self.assertEqual(actual, instance)
+
+
+class FileManagerTest(TestCase):
     path = None
 
     def setUp(self):
@@ -48,8 +65,3 @@ class TestFileManager(TestCase):
         FileManager.delete(path)
         self.assertFalse(default_storage.exists(path))
 
-    def test_get_original_file_path(self):
-        instance = TaskFiles.objects.create(original_file_path="abc.txt")
-        actual = FileManager.get_original_file_path(instance.task_id)
-        expected = instance.original_file_path
-        self.assertEqual(expected, actual)

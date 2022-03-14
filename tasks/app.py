@@ -1,5 +1,5 @@
 from celery import shared_task
-from htmlparser.html_parser import HtmlParser
+from tasks.html_parser import HtmlParser
 
 
 @shared_task
