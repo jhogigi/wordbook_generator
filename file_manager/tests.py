@@ -5,7 +5,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
 from file_manager.file_manager import FileManager
-from file_manager.models import Task
+from tasks.models import Task
 
 
 class FileManagerViewTest(TestCase):
@@ -17,18 +17,6 @@ class FileManagerViewTest(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Task.objects.all().count(), 1)
         os.remove('file_manager/test.txt')
-
-
-class TaskTest(TestCase):
-    def test_create(self):
-        instance = Task.objects.create(original_file_path="test.txt")
-        self.assertTrue(instance.original_file_path)
-        self.assertTrue(instance.task_id)
-
-    def test_get_instance_by_task_id(self):
-        instance = Task.objects.create(original_file_path="test.txt")
-        actual = Task.get_instance_by_task_id(instance.task_id)
-        self.assertEqual(actual, instance)
 
 
 class FileManagerTest(TestCase):

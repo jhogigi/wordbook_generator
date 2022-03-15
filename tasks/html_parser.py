@@ -4,16 +4,16 @@ from typing import List
 from bs4 import BeautifulSoup
 
 from file_manager.file_manager import FileManager
-from file_manager.models import Task
+from tasks.models import Task
 
 
 class HtmlParser:
     @classmethod
     def remove_noise(cls, task_id: str) -> str:
-        task = Task.get_instance_by_task_id(task_id)
+        task = Task.objects.get(id=task_id)
         file_text = FileManager(task.original_file_path).readlines()
         text_list = cls._remove_noise(file_text)
-        write_path = 'extract_' + str(task.task_id)
+        write_path = 'extract_' + str(task.id)
         write_path = FileManager.create(write_path)
         FileManager(write_path).writelines(text_list)
         return write_path
@@ -27,8 +27,8 @@ class HtmlParser:
                 text_list.append(text)
         return text_list
 
-    @classmethod
-    def _remove_noise_from_line(cls, line: str) -> str:
+    @staticmethod
+    def _remove_noise_from_line(line: str) -> str:
         soup = BeautifulSoup(line, 'html.parser')
         for script in soup('script'):
             script.extract()

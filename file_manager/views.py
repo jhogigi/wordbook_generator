@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 from file_manager.forms import UploadFileForm
-from file_manager.models import Task
+from tasks.models import Task
 from tasks.app import call_htmlparser
 
 
@@ -22,6 +22,6 @@ class FileManagerView(View):
             original_file = request.FILES['original_file']
             default_storage.save(now_date, original_file)
             task = Task.objects.create(original_file_path=now_date)
-            call_htmlparser.delay(task.task_id)
+            call_htmlparser.delay(task.id)
 
         return HttpResponse(default_storage.url(now_date))

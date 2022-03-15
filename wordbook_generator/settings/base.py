@@ -23,7 +23,8 @@ INSTALLED_APPS = [
 
     'django_celery_results',
 
-    'file_manager'
+    'file_manager',
+    'tasks'
 ]
 
 MIDDLEWARE = [

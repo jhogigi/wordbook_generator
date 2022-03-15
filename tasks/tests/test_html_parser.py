@@ -9,7 +9,7 @@ from django.core.files.base import ContentFile
 
 from wordbook_generator.settings.base import MEDIA_ROOT
 from tasks.html_parser import HtmlParser
-from file_manager.models import Task
+from tasks.models import Task
 
 
 class HtmlParserTest(TestCase):
@@ -26,6 +26,6 @@ class HtmlParserTest(TestCase):
         default_storage.save(now_date, ContentFile(''))
         instance = Task.objects.create(original_file_path=now_date)
         
-        write_path = HtmlParser.remove_noise(instance.task_id)
+        write_path = HtmlParser.remove_noise(instance.id)
         with default_storage.open(write_path) as f:
             self.assertEqual(f.read(), b'test dummy text')
