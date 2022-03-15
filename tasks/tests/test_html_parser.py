@@ -13,6 +13,10 @@ from tasks.models import Task
 
 
 class HtmlParserTest(TestCase):
+    """TODO
+    _remove_noiseメソッドを
+    _remove_noise_from_lineのモック付きでテストする
+    """
     def tearDown(self):
         shutil.rmtree(MEDIA_ROOT)
         os.mkdir(MEDIA_ROOT)
