@@ -40,3 +40,4 @@ class MorphogicalAnalysisTest(TestCase):
         actual = Morph.objects.all().count()
         expected = 2
         self.assertEqual(expected, actual)
+

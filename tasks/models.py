@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Callable, List
 import uuid
 
 from django.db import models
@@ -19,12 +19,12 @@ class Morph(models.Model):
     @staticmethod
     def bulk_update_by_apply_function(task_id: uuid, field: str, func: Callable) -> None:
         morph = Morph.objects.filter(task=task_id)
-        values = func(morph)
-        morph.bulk_update(values, filed=[field])
+        updated_morph = func(morph)
+        Morph.objects.bulk_update(updated_morph, fields=[field])
 
     @staticmethod
     def delete_by_apply_function(task_id: uuid, func: Callable):
         morph = Morph.objects.filter(task=task_id)
-        target_id = func(morph)
-        for id in target_id:
+        target_morph_id_list = func(morph)
+        for id in target_morph_id_list:
             Morph.objects.get(id=id).delete()

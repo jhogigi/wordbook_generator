@@ -1,0 +1,16 @@
+[
+    {
+      "model": "tasks.Task",
+      "pk": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a0",
+      "fields": {
+          "original_file_path": "dummy_path1" 
+      }
+    },
+    {
+        "model": "tasks.Task",
+        "pk": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a1",
+        "fields": {
+            "original_file_path": "dummy_path2"     
+        }
+    }
+]

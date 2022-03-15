@@ -19,7 +19,7 @@ class HtmlParser:
         return write_path
 
     @classmethod
-    def _remove_noise(cls, file_text: str) -> List[str]:
+    def _remove_noise(cls, file_text: List[str]) -> List[str]:
         text_list = []
         for sentence in file_text:
             text = cls._remove_noise_from_line(sentence)
