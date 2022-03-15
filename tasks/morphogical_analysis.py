@@ -13,7 +13,7 @@ from tasks.models import Morph, Task
 
 class MorphogicalAnalysis:
     @classmethod
-    def start_normalize(cls, file_path: str, task_id: str) -> None:
+    def start_normalize(cls, file_path: str, task_id: uuid) -> None:
         """
         一連の正規化処理実施する。
         """

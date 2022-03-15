@@ -17,9 +17,9 @@ class Serializer:
         self.df = read_frame(morph, field_names=[
             'id', 'wordname', 'meaning', 'parts_of_speech'])
 
-    def serialize(self):
+    def serialize(self) -> str:
         self._calc_frequency()
-        self._to_csv()
+        return self._to_csv()
 
     def _calc_frequency(self) -> None:
         """
