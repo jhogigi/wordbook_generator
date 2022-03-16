@@ -1,7 +1,7 @@
 from typing import List
 import uuid
 
-from nltk.corpus import wordnet
+from nltk.corpus import wordnet, stopwords
 from nltk.stem.porter import PorterStemmer
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.tag import pos_tag
@@ -44,12 +44,13 @@ class MorphogicalAnalysis:
         ex: walking->walk, 
               ate > ate(不規則動詞は処理しない、レンマ化によってされる) 
         """
-        def _func(morph: List[Morph]) -> None:
+        def _func(morph_list: List[Morph]) -> None:
             stemmer = PorterStemmer()
-            stemmed = []
-            for word in morph:
-                stemmed.append(stemmer.stem(word.wordname))
-            return stemmed
+            stems = []
+            for morph in morph_list:
+                morph.wordname = stemmer.stem(morph.wordname)
+                stems.append(morph)
+            return stems
         Morph.bulk_update_by_apply_function(task_id, 'wordname',  _func)
         
     @staticmethod
@@ -60,21 +61,22 @@ class MorphogicalAnalysis:
         ex: ate -> eat,
               cats -> cat
         """
-        def _func(morph: List[Morph]) -> None:
+        def _func(morph_list: List[Morph]) -> None:
             lemmatizer = WordNetLemmatizer()
-            lemma = []
-            for word in morph:
+            lemmatized = []
+            for morph in morph_list:
                 tag = None
-                if word.parts_of_speech.startswith('NN'):  # 名詞
+                if morph.parts_of_speech.startswith('NN'):  # 名詞
                     tag = wordnet.NOUN
-                elif word.part_of_speech.startswith('VB'):  # 動詞
+                elif morph.parts_of_speech.startswith('VB'):  # 動詞
                     tag = wordnet.VERB
-                elif word.part_of_speech.startswith('JJ'):  # 形容詞
+                elif morph.parts_of_speech.startswith('JJ'):  # 形容詞
                     tag = wordnet.ADJ
-                elif word.part_of_speech.startswith('RB'):  # 副詞
+                elif morph.parts_of_speech.startswith('RB'):  # 副詞
                     tag = wordnet.ADV
-                lemma.append(lemmatizer.lemmatizer(word.wordname, tag))
-            return lemma
+                morph.wordname = lemmatizer.lemmatize(morph.wordname, tag)
+                lemmatized.append(morph)
+            return lemmatized
         Morph.bulk_update_by_apply_function(task_id, 'wordname', _func)
 
     @staticmethod
@@ -84,10 +86,10 @@ class MorphogicalAnalysis:
         ストップワードとはI, was, and等、一般的すぎる単語のこと
         """
         def _func(morph):
-            stopwords = stopwords.words('english')
+            stopwords_list = stopwords.words('english')
             target_list = []
             for word in morph:
-                if word.wordname in stopwords:
+                if word.wordname in stopwords_list:
                     target_list.append(word.id)
             return target_list
         Morph.delete_by_apply_function(task_id, _func)

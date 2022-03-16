@@ -13,13 +13,11 @@ from tasks.models import Morph, Task
 
 
 class MorphogicalAnalysisTest(TestCase):
-    """TODO
-    以下のメソッドをモックを使ってテスト
-    _tokenize_text
-    _stemming
-    _lemmatize
-    _remove_stopwords
-    """
+    fixtures = ['tasks.json']
+
+    def setUp(self):
+        self.task = Task.objects.get(original_file_path="dummy_path1")
+
     def tearDown(self):
         shutil.rmtree(MEDIA_ROOT)
         os.mkdir(MEDIA_ROOT)
@@ -38,6 +36,58 @@ class MorphogicalAnalysisTest(TestCase):
         task = Task.objects.create(original_file_path=path)
         MorphogicalAnalysis.start_normalize(now_date, task.id)
         actual = Morph.objects.all().count()
+        expected = 2
+        self.assertEqual(expected, actual)
+
+    def test_private_tokenize_text(self):
+        """
+        What kind animal... -> ['What', 'kind', 'animal'....]
+        """
+        sentences = ['What kind animal do you like?']
+        morph = MorphogicalAnalysis._tokenize_text(sentences)
+        self.assertEqual(len(morph), 7)
+
+    def test_private_stemming(self):
+        """
+        playing -> play
+        """
+        morph = Morph.objects.create(
+            wordname="playing",
+            meaning=None,
+            parts_of_speech="VERB",
+            task=self.task
+        )
+        MorphogicalAnalysis._stemming(self.task.id)
+        actual = Morph.objects.get(id=morph.id).wordname
+        expected = 'play'
+        self.assertEqual(expected, actual)
+
+    def test_lemmatize(self):
+        """
+        ate -> eat
+        """
+        morph = Morph.objects.create(
+            wordname="ate",
+            meaning=None,
+            parts_of_speech="VBXX",
+            task=self.task
+        )
+        MorphogicalAnalysis._lemmatize(self.task.id)
+        actual = Morph.objects.get(id=morph.id).wordname
+        expected = 'eat'
+        self.assertEqual(expected, actual)
+
+    def test_remove_stopwords(self):
+        """
+        do you like cat -> '' '' like cat
+        """
+        Morph.objects.create(wordname="do", parts_of_speech="VERB", task=self.task)
+        Morph.objects.create(wordname="you", parts_of_speech="NOUN", task=self.task)
+        Morph.objects.create(wordname="like", parts_of_speech="VERB", task=self.task)
+        Morph.objects.create(wordname="cat", parts_of_speech="NOUN", task=self.task)
+
+        MorphogicalAnalysis._remove_stopwords(self.task.id)
+        actual = Morph.objects.filter(task=self.task).count()
         expected = 2
         self.assertEqual(expected, actual)
 

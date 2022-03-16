@@ -15,13 +15,8 @@ class TaskTest(TestCase):
 
 
 class MorphTest(TestCase):
-    """TODO
-    以下のテストメソッドを実装する
-    test_create
-    test_bulk_update_by_apply_function
-    test_delete_by_apply_function を
-    """
     fixtures = ['morph.json', 'tasks.json']
+
     def setUp(self):
         self.task = Task.objects.get(original_file_path="dummy_path1")
         self.morph = Morph.objects.get(id="c5ecbde1-cbf4-11e5-a759-6096cb800000")
