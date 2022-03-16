@@ -9,10 +9,11 @@ from tasks.models import Morph
 class Translator:
     @classmethod
     def translate(cls, task_id: uuid) -> None:
-        def _func(morph):
+        def _func(morph_list):
             meanings = []
-            for word in morph:
-                meanings.append(cls._tanslate(word.wordname))
+            for morph in morph_list:
+                morph.meaning = cls._translate(morph.wordname)
+                meanings.append(morph)
             return meanings
         Morph.bulk_update_by_apply_function(task_id, 'meaning', _func)
 
