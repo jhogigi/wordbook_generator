@@ -22,10 +22,11 @@ class MorphogicalAnalyzerTest(TestCase):
         shutil.rmtree(MEDIA_ROOT)
         os.mkdir(MEDIA_ROOT)
 
+    @mock.patch('tasks.morphogical_analyzer.MorphogicalAnalyzer._replace_tag_with_parts_of_speech_str')
     @mock.patch('tasks.morphogical_analyzer.MorphogicalAnalyzer._normalize')
     @mock.patch('tasks.morphogical_analyzer.MorphogicalAnalyzer._tokenize_text')
     @mock.patch('tasks.morphogical_analyzer.pos_tag')
-    def test_start_normalize(self, pos_tag, _tokenize_text, _normalize):
+    def test_start_normalize(self, pos_tag, _tokenize_text, _normalize, _replace_t_with_p):
         # privateの部分はモックをパッチする
         pos_tag.return_value = [('mocked', 'VERB'), ('text', 'NOUN')]
         _tokenize_text.return_value = ['mocked' ,'text']
@@ -38,6 +39,10 @@ class MorphogicalAnalyzerTest(TestCase):
         actual = Morph.objects.all().count()
         expected = 2
         self.assertEqual(expected, actual)
+        pos_tag.assert_called()
+        _tokenize_text.assert_called()
+        _normalize.assert_called()
+        _replace_t_with_p.assert_called()
 
     def test_private_tokenize_text(self):
         """
@@ -91,3 +96,17 @@ class MorphogicalAnalyzerTest(TestCase):
         expected = 2
         self.assertEqual(expected, actual)
 
+    def test_replace_tag_with_parts_of_speech_str(self):
+        """
+        VBXX -> VERB 
+        """
+        morph = Morph.objects.create(
+            wordname="eat",
+            meaning="食べる",
+            parts_of_speech="VBXX",
+            task=self.task
+        )
+        MorphogicalAnalyzer._replace_tag_with_parts_of_speech_str(self.task.id)
+        actual = Morph.objects.get(id=morph.id).parts_of_speech
+        expected = 'VERB'
+        self.assertEqual(expected, actual)
