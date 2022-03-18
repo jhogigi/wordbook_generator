@@ -7,7 +7,7 @@ from django.http import HttpResponse
 
 from file_manager.forms import UploadFileForm
 from tasks.models import Task
-from tasks.app import call_htmlparser
+from tasks.app import get_task_chain
 
 
 class FileManagerView(View):
@@ -22,6 +22,7 @@ class FileManagerView(View):
             original_file = request.FILES['original_file']
             default_storage.save(now_date, original_file)
             task = Task.objects.create(original_file_path=now_date)
-            call_htmlparser.delay(task.id)
+            chain = get_task_chain(task.id)
+            async_result = chain.apply_async()
 
-        return HttpResponse(default_storage.url(now_date))
+        return HttpResponse(async_result)

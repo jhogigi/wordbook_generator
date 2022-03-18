@@ -11,7 +11,7 @@ from file_manager.file_manager import FileManager
 from tasks.models import Morph, Task
 
 
-class MorphogicalAnalysis:
+class MorphogicalAnalyzer:
     @classmethod
     def start_normalize(cls, file_path: str, task_id: uuid) -> None:
         """
@@ -66,14 +66,17 @@ class MorphogicalAnalysis:
             lemmatized = []
             for morph in morph_list:
                 tag = None
+                print(morph.parts_of_speech)
                 if morph.parts_of_speech.startswith('NN'):  # 名詞
-                    tag = wordnet.NOUN
+                    tag = "n"
                 elif morph.parts_of_speech.startswith('VB'):  # 動詞
-                    tag = wordnet.VERB
+                    tag = "v"
                 elif morph.parts_of_speech.startswith('JJ'):  # 形容詞
-                    tag = wordnet.ADJ
+                    tag = "r"
                 elif morph.parts_of_speech.startswith('RB'):  # 副詞
-                    tag = wordnet.ADV
+                    tag = "s"
+                if not tag:
+                    continue
                 morph.wordname = lemmatizer.lemmatize(morph.wordname, tag)
                 lemmatized.append(morph)
             return lemmatized
