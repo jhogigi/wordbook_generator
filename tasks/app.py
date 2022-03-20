@@ -26,6 +26,10 @@ def get_task_chain(task_id: uuid):
 
 @shared_task
 def call_htmlparser(task_id: uuid) -> Tuple[str]:
+    task = Task.objects.get(id=task_id)
+    task.status_detail = "HTMLを解析中です。"
+    task.save()
+    task=None
     write_path = HtmlParser.remove_noise(task_id)
     return task_id, write_path
 
@@ -33,18 +37,30 @@ def call_htmlparser(task_id: uuid) -> Tuple[str]:
 @shared_task
 def call_morpohgical_analyzer(args: Tuple) -> uuid:
     task_id, file_path = args
+    task = Task.objects.get(id=task_id)
+    task.status_detail = "出現する単語を調べて正規化処理を行っています。"
+    task.save()
+    task=None
     MorphogicalAnalyzer.start_normalize(file_path, task_id)
     return task_id
 
 
 @shared_task
 def call_translator(task_id: uuid) -> uuid:
+    task = Task.objects.get(id=task_id)
+    task.status_detail = "単語の意味を取得しています。"
+    task.save()
+    task=None
     Translator.translate(task_id)
     return task_id
 
 
 @shared_task
 def call_serializer(task_id: uuid) -> str:
+    task = Task.objects.get(id=task_id)
+    task.status_detail = "csvファイルを作成しています。"
+    task.save()
+    task=None
     s = Serializer(task_id)
     write_path = s.serialize()
     return task_id, write_path
@@ -56,4 +72,5 @@ def save_output_file_path(args: Tuple):
     task = Task.objects.get(id=task_id)
     task.output_file_path = write_filepath
     task.save()
+    task=None
     return task_id

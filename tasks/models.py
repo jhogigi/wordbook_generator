@@ -9,6 +9,7 @@ class Task(models.Model):
     original_file_path = models.CharField(max_length=100)
     output_file_path = models.CharField(max_length=100, null=True)
     async_result_id = models.UUIDField(default=uuid.uuid4, null=True)
+    status_detail = models.CharField(max_length=100, null=True)
 
 
 class Morph(models.Model):
