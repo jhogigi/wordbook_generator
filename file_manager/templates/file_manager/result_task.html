@@ -1,0 +1,10 @@
+{% extends 'file_manager/layout.html' %}
+
+{% block title %}結果{% endblock %}
+
+{% block content %}
+<div>
+    {{ csv_download_path }}
+    {{ data }}
+</div>
+{% endblock %}

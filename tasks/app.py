@@ -2,6 +2,7 @@ from typing import Tuple
 import uuid
 
 from celery import shared_task, chain
+from tasks.models import Task
 from tasks.html_parser import HtmlParser
 from tasks.morphogical_analyzer import MorphogicalAnalyzer
 from tasks.translator import Translator
@@ -18,7 +19,8 @@ def get_task_chain(task_id: uuid):
         call_htmlparser.s(task_id),
         call_morpohgical_analyzer.s(),
         call_translator.s(),
-        call_serializer.s()
+        call_serializer.s(),
+        save_output_file_path.s()
     )
 
 
@@ -45,4 +47,13 @@ def call_translator(task_id: uuid) -> uuid:
 def call_serializer(task_id: uuid) -> str:
     s = Serializer(task_id)
     write_path = s.serialize()
-    return write_path
+    return task_id, write_path
+
+
+@shared_task
+def save_output_file_path(args: Tuple):
+    task_id, write_filepath = args
+    task = Task.objects.get(id=task_id)
+    task.output_file_path = write_filepath
+    task.save()
+    return task_id

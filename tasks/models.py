@@ -1,4 +1,4 @@
-from typing import Callable, List
+from typing import Callable
 import uuid
 
 from django.db import models
@@ -7,12 +7,14 @@ from django.db import models
 class Task(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     original_file_path = models.CharField(max_length=100)
+    output_file_path = models.CharField(max_length=100, null=True)
+    async_result_id = models.UUIDField(default=uuid.uuid4, null=True)
 
 
 class Morph(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    wordname = models.CharField(max_length=200)
-    meaning = models.CharField(max_length=200, null=True)
+    wordname = models.CharField(max_length=500)
+    meaning = models.CharField(max_length=500, null=True)
     parts_of_speech = models.CharField(max_length=200, null=True)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
 

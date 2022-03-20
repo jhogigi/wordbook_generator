@@ -14,9 +14,9 @@ class FileManagerViewTest(TestCase):
             f.write('ABC')
         with open('file_manager/test.txt') as f:
             response = self.client.post('/file_upload/', {'original_file': f})
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(Task.objects.all().count(), 1)
         os.remove('file_manager/test.txt')
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(Task.objects.all().count(), 1)
 
 
 class FileManagerTest(TestCase):

@@ -39,6 +39,6 @@ class TestTaskApp(TestCase):
         serialize.return_value = 'dummy'
         
         actual = call_serializer(self.task.id)
-        expected = 'dummy'
+        expected = (self.task.id, 'dummy')
         self.assertEqual(expected, actual)
 

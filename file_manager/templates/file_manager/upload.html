@@ -1,18 +1,35 @@
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ファイルアップロード</title>
-</head>
-<body>
-    <h1>単語帳データを作成</h1>
-    <p>.htmlもしくは.txtファイルをアップロードしてください</p>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_table }}
-        <button type="submit">アップロード</button>
-    </form>
-</body>
-</html>
+{% extends 'file_manager/layout.html' %}
+
+{% block title %}ファイルアップロード{% endblock %}
+
+{% block content %}
+<div>
+    <br>
+    <p>こちらのページは、単語帳ジェネレータです。<br>
+    英語の文書やHTMLファイルから英単語の出現頻度を取得した後、<br>
+    各種正規化処理を実施して、各単語に語義を付与したリスト
+    をcsvファイル形式でレスポンスします。</p>
+    <p>具体的な正規化処理は以下の３つです</p>
+    <ul>
+        <li>ステミング。活用系から語幹を取得します。playing -> play。</li>
+        <li>レマタイズ。品詞から語幹の取得を試みます。ステム化では難しい不規則活用動詞等に有効です。ate -> eat。</li>
+        <li>ストップワード除去。『am,was,us』などの一般的でどのような文書でも見られるような単語は除去します。</li>
+    </ul>
+    <p>お試しいただくには、以下のフォームをお使いください。</p>
+    <br>
+</div>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div>
+        {{ form.non_field_errors }}
+    </div>
+
+    <p>.htmlもしくは.txtファイルを指定してください。</p>
+    <div class="ui big labeled input">
+        <label class="ui label">生成元ファイル</label>
+        {{ form.original_file }}
+    </div>
+        <button class="ui primary big button" type="submit">アップロード</button>
+</form>
+{% endblock %}
