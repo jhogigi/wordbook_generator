@@ -23,7 +23,7 @@ class MorphTest(TestCase):
 
     def test_create(self):
         Morph.objects.create(wordname='walk', meaning='歩く',
-                                     parts_of_speech='VERB', task=self.task)
+                                     parts_of_speech='VERB', frequency=1, task=self.task)
         self.assertTrue(Morph.objects.all().count())
 
     def test_bulk_update_by_apply_function(self):

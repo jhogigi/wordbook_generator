@@ -16,8 +16,8 @@ class TranslatorTest(TestCase):
     def test_translate(self, _translate):
         _translate.side_effect = ['ねこ', 'いぬ']
 
-        Morph.objects.create(wordname="cat", parts_of_speech="NOUN", task=self.task)
-        Morph.objects.create(wordname="dog", parts_of_speech="NOUN", task=self.task)
+        Morph.objects.create(wordname="cat", parts_of_speech="NOUN", task=self.task, frequency=2)
+        Morph.objects.create(wordname="dog", parts_of_speech="NOUN", task=self.task, frequency=2)
         
         Translator.translate(self.task.id)
         acutual = [Morph.objects.get(wordname="cat").meaning, Morph.objects.get(wordname='dog').meaning]

@@ -6,7 +6,8 @@
             "wordname": "walk",
             "meaning": "歩く",
             "parts_of_speech": "VERB",
-            "task": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a0"
+            "task": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a0",
+            "frequency": 3
       }
     },
     {
@@ -16,7 +17,8 @@
               "wordname": "move",
               "meaning": "動く",
               "parts_of_speech": "VERB",
-              "task": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a0"
+              "task": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a0",
+              "frequency": 3
         }
       }
 ]

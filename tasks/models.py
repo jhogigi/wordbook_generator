@@ -16,6 +16,7 @@ class Morph(models.Model):
     wordname = models.CharField(max_length=500)
     meaning = models.CharField(max_length=500, null=True)
     parts_of_speech = models.CharField(max_length=200, null=True)
+    frequency = models.IntegerField(null=False)
     task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
     @staticmethod

@@ -16,24 +16,10 @@ class Serializer:
         task = Task.objects.get(id=task_id)
         morph = Morph.objects.filter(task=task)
         self.df = read_frame(morph, fieldnames=[
-            'id', 'wordname', 'meaning', 'parts_of_speech'])
+            'id', 'wordname', 'meaning', 'parts_of_speech', 'frequency'])
 
     def serialize(self) -> str:
-        self._calc_frequency()
         return self._to_csv()
-
-    def _calc_frequency(self) -> None:
-        """
-        単語の出現回数を計算しself.dfを再代入します
-        """
-        data = []
-        for morph, frequency in self.df[['wordname', 'parts_of_speech', 'meaning']].value_counts().iteritems():
-            wordname = morph[0]
-            meaning = morph[1]
-            parts_of_speech = morph[2]
-            data.append((wordname, parts_of_speech,meaning, frequency))
-        self.df = pd.DataFrame(
-            data, columns=['wordname', 'meaning', 'parts_of_speech', 'frequency'])
 
     def _to_csv(self) -> str:
         """

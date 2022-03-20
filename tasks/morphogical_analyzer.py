@@ -1,3 +1,4 @@
+from collections import Counter
 from typing import List
 import uuid
 
@@ -12,15 +13,28 @@ from tasks.models import Morph, Task
 
 
 class MorphogicalAnalyzer:
+    MAX_MORPH_NUM: int = 500
+
     @classmethod
     def start_normalize(cls, file_path: str, task_id: uuid) -> None:
         """
         一連の正規化処理実施する。
+        文字の出現頻度のカウントとフィルタリングを行う
         """
         morph = cls._tokenize_text(FileManager(file_path).readlines())
         task = Task.objects.get(id=task_id)
+        morph_l = []
         for wordname, pos in pos_tag(morph):
-            Morph.objects.create(wordname=wordname, meaning=None, parts_of_speech=pos, task=task)
+            morph_l.append((wordname, pos,))
+        c = Counter(morph_l).most_common()
+        for morph, freq in c[:cls.MAX_MORPH_NUM]:
+            Morph.objects.create(
+                wordname=morph[0],
+                meaning=None,
+                parts_of_speech=morph[1],
+                frequency=freq,
+                task=task
+            )
         cls._normalize(task.id)
         cls._replace_tag_with_parts_of_speech_str(task.id)
 
@@ -99,6 +113,7 @@ class MorphogicalAnalyzer:
             return target_list
         Morph.delete_by_apply_function(task_id, _func)
 
+    @staticmethod
     def _replace_tag_with_parts_of_speech_str(task_id: uuid) -> None:
         """
         NN -> NOUN

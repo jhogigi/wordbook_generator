@@ -28,7 +28,10 @@ class MorphogicalAnalyzerTest(TestCase):
     @mock.patch('tasks.morphogical_analyzer.pos_tag')
     def test_start_normalize(self, pos_tag, _tokenize_text, _normalize, _replace_t_with_p):
         # privateの部分はモックをパッチする
-        pos_tag.return_value = [('mocked', 'VERB'), ('text', 'NOUN')]
+        pos_tag.return_value = [
+            ('mocked', 'VERB'), ('mocked', 'VERB'),
+            ('text', 'NOUN'),
+            ('test', 'NOUN'), ('test', 'NOUN'), ('test', 'NOUN')]
         _tokenize_text.return_value = ['mocked' ,'text']
         _normalize.return_value = None
 
@@ -37,7 +40,7 @@ class MorphogicalAnalyzerTest(TestCase):
         task = Task.objects.create(original_file_path=path)
         MorphogicalAnalyzer.start_normalize(now_date, task.id)
         actual = Morph.objects.all().count()
-        expected = 2
+        expected = 3
         self.assertEqual(expected, actual)
         pos_tag.assert_called()
         _tokenize_text.assert_called()
@@ -60,7 +63,8 @@ class MorphogicalAnalyzerTest(TestCase):
             wordname="playing",
             meaning=None,
             parts_of_speech="VERB",
-            task=self.task
+            task=self.task,
+            frequency=2
         )
         MorphogicalAnalyzer._stemming(self.task.id)
         actual = Morph.objects.get(id=morph.id).wordname
@@ -75,7 +79,8 @@ class MorphogicalAnalyzerTest(TestCase):
             wordname="ate",
             meaning=None,
             parts_of_speech="VBXX",
-            task=self.task
+            task=self.task,
+            frequency=2
         )
         MorphogicalAnalyzer._lemmatize(self.task.id)
         actual = Morph.objects.get(id=morph.id).wordname
@@ -86,10 +91,10 @@ class MorphogicalAnalyzerTest(TestCase):
         """
         do you like cat -> '' '' like cat
         """
-        Morph.objects.create(wordname="do", parts_of_speech="VERB", task=self.task)
-        Morph.objects.create(wordname="you", parts_of_speech="NOUN", task=self.task)
-        Morph.objects.create(wordname="like", parts_of_speech="VERB", task=self.task)
-        Morph.objects.create(wordname="cat", parts_of_speech="NOUN", task=self.task)
+        Morph.objects.create(wordname="do", parts_of_speech="VERB", task=self.task, frequency=2)
+        Morph.objects.create(wordname="you", parts_of_speech="NOUN", task=self.task, frequency=2)
+        Morph.objects.create(wordname="like", parts_of_speech="VERB", task=self.task, frequency=2)
+        Morph.objects.create(wordname="cat", parts_of_speech="NOUN", task=self.task, frequency=2)
 
         MorphogicalAnalyzer._remove_stopwords(self.task.id)
         actual = Morph.objects.filter(task=self.task).count()
@@ -104,7 +109,8 @@ class MorphogicalAnalyzerTest(TestCase):
             wordname="eat",
             meaning="食べる",
             parts_of_speech="VBXX",
-            task=self.task
+            task=self.task,
+            frequency=2
         )
         MorphogicalAnalyzer._replace_tag_with_parts_of_speech_str(self.task.id)
         actual = Morph.objects.get(id=morph.id).parts_of_speech
