@@ -21,11 +21,19 @@
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <div>
-        {{ form.non_field_errors }}
-    </div>
+    <p>.htmlもしくは.txtファイルを指定できます。</p>
 
-    <p>.htmlもしくは.txtファイルを指定してください。</p>
+    {% if form.original_file.errors %}
+        <div class="ui warning message">
+            <ul>
+                {% for error in form.original_file.errors %}
+                <li>
+                    {{ error }}
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
     <div class="ui big labeled input">
         <label class="ui label">生成元ファイル</label>
         {{ form.original_file }}

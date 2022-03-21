@@ -27,7 +27,8 @@ class FileManagerView(View):
             async_result = chain.apply_async()
             task.async_result_id = async_result.task_id
             task.save()
-        return redirect(f'/waiting_task/{task.id}/')
+            return redirect(f'/waiting_task/{task.id}/')
+        return render(request, 'file_manager/upload.html', {'form': form})
 
 
 class WaitingTaskPage(TemplateView):
