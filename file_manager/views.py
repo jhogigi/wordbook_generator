@@ -43,13 +43,11 @@ class ResultTaskPage(TemplateView):
 
     def get_context_data(self, task_id, **kwargs):
         task = Task.objects.get(id=task_id)
-        df = pd.read_csv(task.output_file_path)
+        df = pd.read_csv(task.output_file_path, index_col=0)
+        now= datetime.datetime.now()
 
         ctx = super().get_context_data(**kwargs)
         ctx['csv_download_path'] = task.output_file_path
-        ctx['data'] = df.head().to_json()
+        ctx['csv_download_name'] = f'{now}.csv'
+        ctx['data'] = df.head(50).to_dict(orient="records")
         return ctx
-
-
-# class DownloadCsvFile(??View):
-#     pass

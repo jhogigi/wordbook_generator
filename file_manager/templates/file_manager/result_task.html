@@ -4,7 +4,30 @@
 
 {% block content %}
 <div>
-    {{ csv_download_path }}
-    {{ data }}
+    <div>
+        <br>
+        <a href="{{ csv_download_path }}" download="{{ csv_download_name }}">ファイルのダウンロード</a>
+    </div>
+    <table class="ui celled table">
+        <thead>
+          <tr>
+              <th>単語</th>
+              <th>意味</th>
+              <th>品詞</th>
+              <th>出現頻度</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for record in data %}
+        <tr>
+            <td> {{ record.wordname  }}</td>
+            <td> {{ record.meaning }}</td>
+            <td> {{ record.parts_of_speech }}</td>
+            <td> {{ record.frequency }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 </div>
 {% endblock %}

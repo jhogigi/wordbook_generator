@@ -25,7 +25,10 @@ class Serializer:
         """
         csvファイルを作成
         pathを返します。
+        最終のフィルタリング、欠損値処理も実施します。
         """
         write_path = f'{MEDIA_ROOT}/{self.task_id}.csv'
-        self.df.to_csv(write_path)
+        df = self.df.dropna(how='any', axis=0)
+        df =  df.sort_values('frequency', ascending=False)
+        df.to_csv(write_path)
         return write_path
