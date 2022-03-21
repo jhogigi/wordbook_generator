@@ -86,12 +86,10 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = '/var/www/{}/static'.format('wordbookge')
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = '/var/www/{}/media'.format('wordbookge')
 MEDIA_URL = '/media/'
-STATIC_ROOT = '/var/www/{}/media'.format('wordbookge')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
