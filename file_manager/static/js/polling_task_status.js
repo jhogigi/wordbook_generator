@@ -9,11 +9,12 @@ window.onload = function() {
                 'Content-Type': 'application/json'
             }
         })
-        .then((response) => response.json())
-        .then((data) => {
-            if (data["status"] == "SUCCESS") {
+        .then(response => response.json())
+        .then(data => {
+            console.log(data)
+            if (data["status"] == "SUCCESS" || data['detail'] == "完了") {
                 window.location.href = `/task_result/${task_id}`
-            } else if (data["status"] == "FAILURE") {
+            } else if (data["status"] === "FAILURE") {
                 alert("申し訳ございません。タスクの処理に失敗しました。")
                 window.location.href = "/file_upload/"
             }else {
