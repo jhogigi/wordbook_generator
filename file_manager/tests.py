@@ -13,7 +13,7 @@ class FileManagerViewTest(TestCase):
         with open('file_manager/test.html', 'w') as f:
             f.write('ABC')
         with open('file_manager/test.html') as f:
-            response = self.client.post('/file_upload/', {'original_file': f})
+            response = self.client.post('', {'original_file': f})
         os.remove('file_manager/test.html')
         self.assertEqual(response.status_code, 302)
         self.assertEqual(Task.objects.all().count(), 1)
@@ -22,7 +22,7 @@ class FileManagerViewTest(TestCase):
         with open('file_manager/test.css', 'w') as f:
             f.write('ABC')
         with open('file_manager/test.css') as f:
-            response = self.client.post('/file_upload/', {'original_file': f})
+            response = self.client.post('', {'original_file': f})
         os.remove('file_manager/test.css')
         self.assertTrue(response.status_code, 200)
         self.assertEqual(Task.objects.all().count(), 0)
