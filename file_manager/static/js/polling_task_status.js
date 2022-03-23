@@ -16,7 +16,7 @@ window.onload = function() {
                 window.location.href = `/task_result/${task_id}`
             } else if (data["status"] === "FAILURE") {
                 alert("申し訳ございません。タスクの処理に失敗しました。")
-                window.location.href = "/file_upload/"
+                window.location.href = "/"
             }else {
                 detail.textContent = data["detail"]
             }
