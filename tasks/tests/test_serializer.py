@@ -11,7 +11,7 @@ from tasks.models import Task
 
 
 class SerializerTest(TestCase):
-    fixtures = ['tasks.json', 'big_morph.json']
+    fixtures = ['tasks.json', 'morph.json', 'words.json']
 
     def setUp(self):
         self.task = Task.objects.get(original_file_path='dummy_path1')

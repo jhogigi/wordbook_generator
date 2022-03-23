@@ -1,24 +1,29 @@
 [
-    {
-      "model": "tasks.Morph",
-      "pk": "c5ecbde1-cbf4-11e5-a759-6096cb800000",
-      "fields": {
-            "wordname": "walk",
-            "meaning": "歩く",
-            "parts_of_speech": "VERB",
-            "task": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a0",
-            "frequency": 3
-      }
-    },
-    {
+      {
         "model": "tasks.Morph",
-        "pk": "c5ecbde1-cbf4-11e5-a759-6096cb800001",
+        "pk": 1,
         "fields": {
-              "wordname": "move",
-              "meaning": "動く",
-              "parts_of_speech": "VERB",
-              "task": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a0",
-              "frequency": 3
+              "wordname": "fire",
+              "meaning": "火",
+              "parts_of_speech": "NOUN"
         }
-      }
-]
+      },
+      {
+          "model": "tasks.Morph",
+          "pk": 2,
+          "fields": {
+                "wordname": "fire",
+                "meaning": "解雇する",
+                "parts_of_speech": "VERB"
+          }
+      },
+      {
+          "model": "tasks.Morph",
+          "pk": 3,
+          "fields": {
+                "wordname": "cat",
+                "meaning": "ねこ",
+                "parts_of_speech": "NOUN"
+          }
+        }
+  ]

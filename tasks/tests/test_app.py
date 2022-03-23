@@ -41,4 +41,3 @@ class TestTaskApp(TestCase):
         actual = call_serializer(self.task.id)
         expected = (self.task.id, 'dummy')
         self.assertEqual(expected, actual)
-

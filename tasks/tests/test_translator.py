@@ -16,10 +16,11 @@ class TranslatorTest(TestCase):
     def test_translate(self, _translate):
         _translate.side_effect = ['ねこ', 'いぬ']
 
-        Morph.objects.create(wordname="cat", parts_of_speech="NOUN", task=self.task, frequency=2)
-        Morph.objects.create(wordname="dog", parts_of_speech="NOUN", task=self.task, frequency=2)
+        m1=Morph.objects.create(wordname="cat", parts_of_speech="NOUN")
+        m2=Morph.objects.create(wordname="dog", parts_of_speech="NOUN")
         
-        Translator.translate(self.task.id)
+        target_morph = [m1,m2]
+        Translator.translate(target_morph)
         acutual = [Morph.objects.get(wordname="cat").meaning, Morph.objects.get(wordname='dog').meaning]
         expected = ['ねこ', 'いぬ']
         self.assertEqual(expected, acutual)

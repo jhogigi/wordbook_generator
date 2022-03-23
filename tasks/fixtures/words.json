@@ -1,0 +1,29 @@
+[
+    {
+      "model": "tasks.Word",
+      "pk": "c5ecbde1-cbf4-11e5-a759-6096cb800001",
+      "fields": {
+            "morph": 1,
+            "frequency": 10,
+            "task": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a0"
+      }
+    },
+    {
+        "model": "tasks.Word",
+        "pk": "c5ecbde1-cbf4-11e5-a759-6096cb800002",
+        "fields": {
+              "morph": 2,
+              "frequency": 10,
+              "task": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a0"
+        }
+      },
+      {
+        "model": "tasks.Word",
+        "pk": "c5ecbde1-cbf4-11e5-a759-6096cb800004",
+        "fields": {
+              "morph": 3,
+              "frequency": 10,
+              "task": "c5ecbde1-cbf4-11e5-a759-6096cb89d9a0"
+        }
+      }
+]

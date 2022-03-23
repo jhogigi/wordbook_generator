@@ -1,9 +1,6 @@
-from typing import List
-
 from django_pandas.io import read_frame
-import pandas as pd
 
-from tasks.models import Morph, Task
+from tasks.models import Task, Word
 from wordbook_generator.settings.base import MEDIA_ROOT
 
 class Serializer:
@@ -14,9 +11,20 @@ class Serializer:
         self.task_id = task_id
 
         task = Task.objects.get(id=task_id)
-        morph = Morph.objects.filter(task=task)
-        self.df = read_frame(morph, fieldnames=[
-            'id', 'wordname', 'meaning', 'parts_of_speech', 'frequency'])
+        words = Word.objects.filter(task=task)
+        self.df = read_frame(words, fieldnames=[
+            'id',
+            'morph__wordname',
+            'morph__meaning',
+            'morph__parts_of_speech',
+            'frequency'
+        ]).rename(
+            columns={
+                'morph__wordname': 'wordname',
+                'morph__meaning': 'meaning',
+                'morph__parts_of_speech': 'parts_of_speech',
+            }
+        )
 
     def serialize(self) -> str:
         return self._to_csv()

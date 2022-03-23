@@ -9,7 +9,7 @@ from django.test import TestCase
 
 from wordbook_generator.settings.base import MEDIA_ROOT
 from tasks.morphogical_analyzer import MorphogicalAnalyzer
-from tasks.models import Morph, Task
+from tasks.models import Morph, Task, Word
 
 
 class MorphogicalAnalyzerTest(TestCase):
@@ -29,11 +29,12 @@ class MorphogicalAnalyzerTest(TestCase):
     def test_start_normalize(self, pos_tag, _tokenize_text, _normalize, _replace_t_with_p):
         # privateの部分はモックをパッチする
         pos_tag.return_value = [
-            ('mocked', 'VERB'), ('mocked', 'VERB'),
-            ('text', 'NOUN'),
-            ('test', 'NOUN'), ('test', 'NOUN'), ('test', 'NOUN')]
+            ('mocked', 'VBXX'), ('mocked', 'VBXX'),
+            ('text', 'NNXX'),
+            ('test', 'NNXX'), ('test', 'NNXX'), ('test', 'NNXX')]
         _tokenize_text.return_value = ['mocked' ,'text']
-        _normalize.return_value = None
+        _normalize.side_effect = ['mocked', 'mocked', 'text', 'test', 'test', 'test']
+        _replace_t_with_p.side_effect = ['VERB', 'VERB', 'NOUN', 'NOUN', 'NOUN', 'NOUN']
 
         now_date = str(datetime.datetime.now())
         path = default_storage.save(now_date, ContentFile(''))
@@ -59,15 +60,9 @@ class MorphogicalAnalyzerTest(TestCase):
         """
         playing -> play
         """
-        morph = Morph.objects.create(
-            wordname="playing",
-            meaning=None,
-            parts_of_speech="VERB",
-            task=self.task,
-            frequency=2
-        )
-        MorphogicalAnalyzer._stemming(self.task.id)
-        actual = Morph.objects.get(id=morph.id).wordname
+        wordname="playing"
+        wordname=MorphogicalAnalyzer._stemming(wordname)
+        actual = wordname
         expected = 'play'
         self.assertEqual(expected, actual)
 
@@ -75,44 +70,27 @@ class MorphogicalAnalyzerTest(TestCase):
         """
         ate -> eat
         """
-        morph = Morph.objects.create(
-            wordname="ate",
-            meaning=None,
-            parts_of_speech="VBXX",
-            task=self.task,
-            frequency=2
-        )
-        MorphogicalAnalyzer._lemmatize(self.task.id)
-        actual = Morph.objects.get(id=morph.id).wordname
+        wordname="ate"
+        parts_of_speech="VBXX"
+        wordname=MorphogicalAnalyzer._lemmatize(wordname, parts_of_speech)
+        actual = wordname
         expected = 'eat'
         self.assertEqual(expected, actual)
 
     def test_remove_stopwords(self):
         """
-        do you like cat -> '' '' like cat
+        do -> None
         """
-        Morph.objects.create(wordname="do", parts_of_speech="VERB", task=self.task, frequency=2)
-        Morph.objects.create(wordname="you", parts_of_speech="NOUN", task=self.task, frequency=2)
-        Morph.objects.create(wordname="like", parts_of_speech="VERB", task=self.task, frequency=2)
-        Morph.objects.create(wordname="cat", parts_of_speech="NOUN", task=self.task, frequency=2)
-
-        MorphogicalAnalyzer._remove_stopwords(self.task.id)
-        actual = Morph.objects.filter(task=self.task).count()
-        expected = 2
-        self.assertEqual(expected, actual)
+        wordname = "do"
+        wordname=MorphogicalAnalyzer._remove_stopwords(wordname)
+        self.assertFalse(wordname)
 
     def test_replace_tag_with_parts_of_speech_str(self):
         """
         VBXX -> VERB 
         """
-        morph = Morph.objects.create(
-            wordname="eat",
-            meaning="食べる",
-            parts_of_speech="VBXX",
-            task=self.task,
-            frequency=2
-        )
-        MorphogicalAnalyzer._replace_tag_with_parts_of_speech_str(self.task.id)
-        actual = Morph.objects.get(id=morph.id).parts_of_speech
+        pos = 'VBXX'
+        pos=MorphogicalAnalyzer._replace_tag_with_parts_of_speech_str(pos)
+        actual = pos
         expected = 'VERB'
         self.assertEqual(expected, actual)

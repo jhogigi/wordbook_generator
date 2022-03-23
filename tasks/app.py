@@ -2,7 +2,7 @@ from typing import Tuple
 import uuid
 
 from celery import shared_task, chain
-from tasks.models import Task
+from tasks.models import Task, Morph
 from tasks.html_parser import HtmlParser
 from tasks.morphogical_analyzer import MorphogicalAnalyzer
 from tasks.translator import Translator
@@ -30,21 +30,26 @@ def call_htmlparser(task_id: uuid) -> Tuple[str]:
 
 
 @shared_task
-def call_morpohgical_analyzer(args: Tuple) -> uuid:
+def call_morpohgical_analyzer(args: Tuple) -> Tuple:
     task_id, file_path = args
     task = Task.objects.get(id=task_id)
     task.status_detail = "出現する単語を調べて正規化処理を行っています。"
     task.save()
-    MorphogicalAnalyzer.start_normalize(file_path, task_id)
-    return task_id
+    new_morph = MorphogicalAnalyzer.start_normalize(file_path, task_id)
+    new_morph_id = [morph.id for morph in new_morph]
+    return task_id, new_morph_id
 
 
 @shared_task
-def call_translator(task_id: uuid) -> uuid:
+def call_translator(args: Tuple) -> uuid:
+    task_id, new_morph_id = args
     task = Task.objects.get(id=task_id)
     task.status_detail = "単語の意味を取得しています。"
     task.save()
-    Translator.translate(task_id)
+    new_morph = []
+    for id in new_morph_id:
+        new_morph.append(Morph.objects.get(id=id))
+    Translator.translate(new_morph)
     return task_id
 
 
