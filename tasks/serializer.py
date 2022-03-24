@@ -13,16 +13,15 @@ class Serializer:
         task = Task.objects.get(id=task_id)
         words = Word.objects.filter(task=task)
         self.df = read_frame(words, fieldnames=[
-            'id',
             'morph__wordname',
-            'morph__meaning',
             'morph__parts_of_speech',
-            'frequency'
+            'frequency',
+            'morph__meaning'
         ]).rename(
             columns={
                 'morph__wordname': 'wordname',
-                'morph__meaning': 'meaning',
                 'morph__parts_of_speech': 'parts_of_speech',
+                'morph__meaning': 'meaning',
             }
         )
 
