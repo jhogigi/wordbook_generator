@@ -1,7 +1,7 @@
 from django_pandas.io import read_frame
 
 from tasks.models import Task, Word
-from wordbook_generator.settings.base import MEDIA_ROOT
+from wordbook_generator.settings.base import MEDIA_ROOT, MEDIA_URL
 
 class Serializer:
     df = None
@@ -27,9 +27,11 @@ class Serializer:
         )
 
     def serialize(self) -> str:
-        return self._to_csv()
+        self._to_csv()
+        write_path = f'{MEDIA_URL}/{self.task_id}.csv'
+        return write_path
 
-    def _to_csv(self) -> str:
+    def _to_csv(self) -> None:
         """
         csvファイルを作成
         pathを返します。
@@ -39,4 +41,4 @@ class Serializer:
         df = self.df.dropna(how='any', axis=0)
         df =  df.sort_values('frequency', ascending=False)
         df.to_csv(write_path)
-        return write_path
+        return None
