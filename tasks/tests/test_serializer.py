@@ -28,4 +28,5 @@ class SerializerTest(TestCase):
 
     def test_private_to_csv(self):
         s = Serializer(self.task.id)
-        s._to_csv()
+        path = s._to_csv()
+        self.assertTrue(default_storage.exists(path))
