@@ -28,7 +28,7 @@ class Serializer:
 
     def serialize(self) -> str:
         self._to_csv()
-        write_path = f'{MEDIA_URL}/{self.task_id}.csv'
+        write_path = f'{MEDIA_URL}{self.task_id}.csv'
         return write_path
 
     def _to_csv(self) -> None:
