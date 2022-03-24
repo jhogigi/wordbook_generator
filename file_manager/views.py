@@ -8,6 +8,7 @@ import pandas as pd
 from file_manager.forms import UploadFileForm
 from tasks.models import Task
 from tasks.app import get_task_chain
+from wordbook_generator.settings.base import MEDIA_URL
 
 
 class FileManagerView(View):
@@ -49,7 +50,8 @@ class ResultTaskPage(TemplateView):
         now= datetime.datetime.now()
 
         ctx = super().get_context_data(**kwargs)
-        ctx['csv_download_path'] = task.output_file_path
+        file_path =  task.output_file_path.replace('/var/www/wordbookge/media/', '')
+        ctx['csv_download_path'] = f'{MEDIA_URL}{file_path}'
         ctx['csv_download_name'] = f'{now}.csv'
         ctx['data'] = df.head(50).to_dict(orient="records")
         return ctx
