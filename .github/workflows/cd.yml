@@ -1,0 +1,29 @@
+name: CD
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy-web-application:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: djangoプロジェクトのデプロイ
+        uses: appleboy/ssh-action@master
+        with:
+          key: ${{ secrets.SECRET_KEY }}
+          host: ${{secrets.SSH_HOST}}
+          username: ${{secrets.SSH_USERNAME}}
+          port: ${{secrets.SSH_PORT}}
+          script: |
+            cd wordbook_generator/
+            git pull origin main
+            source venv/bin/activate
+            pip install -r requirements.txt
+            python manage.py migrate
+            python manage.py collectstatic --noinput
+            sudo systemctl restart wordbookge
+            sudo nginx -s reload
+            sudo service rabbitmq-server restart
