@@ -1,0 +1,19 @@
+{% extends 'file_manager/layout.html' %}
+
+{% block title %}デモ{% endblock %}
+
+{% block content %}
+<div class="ui text container">
+    <p>
+        <a href="https://www.gutenberg.org/">Project Gutenberg</a>
+        というサイトから 
+        Lewis Carrollの『Alice in Wonderland(不思議の国のアリス)のHTMLページをお借りして
+        簡単に当サイトの機能を試すことができます。</p>
+    <p>以下のボタンから開始します。</p>
+    <form method="POST">
+        {% csrf_token %}
+        <button class="ui olive big button" type="submit"><i class="play icon"></i>デモを開始する</button>
+    </form>
+</div>
+{% endblock %}
+)

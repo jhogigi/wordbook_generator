@@ -61,4 +61,3 @@ class FileManagerTest(TestCase):
         self.assertTrue(default_storage.exists(path))
         FileManager.delete(path)
         self.assertFalse(default_storage.exists(path))
-

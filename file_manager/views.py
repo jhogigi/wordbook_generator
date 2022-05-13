@@ -32,6 +32,20 @@ class FileManagerView(View):
         return render(request, 'file_manager/upload.html', {'form': form})
 
 
+class DemoView(View):
+    def get(self, request, *args, **kwargs):
+        return render(request, 'file_manager/demo.html')
+
+    def post(self, request, *args, **kwargs):
+        task = Task.objects.create(original_file_path="alice.html")
+
+        chain = get_task_chain(task.id)
+        async_result = chain.apply_async()
+        task.async_result_id = async_result.task_id
+        task.save()
+        return redirect(f'/waiting_task/{task.id}/')
+
+
 class WaitingTaskPage(TemplateView):
     template_name ='file_manager/waiting_task.html'
 

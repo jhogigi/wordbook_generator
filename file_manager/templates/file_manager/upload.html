@@ -15,14 +15,18 @@
         <li>レマタイズ。品詞から語幹の取得を試みます。ステム化では難しい不規則活用動詞等に有効です。ate -> eat。</li>
         <li>ストップワード除去。『am,was,us』などの一般的でどのような文書でも見られるような単語は除去します。</li>
     </ul>
-    <p>お試しいただくには、以下のフォームをお使いください。</p>
+    <p>お試しいただくには、以下のフォームからHTMLファイルをアップロードしてください。</p>
+    <p class="ui segment">
+        <span class="ui blue text">
+            または、簡単に当サイトの機能を試したいという方は
+            <a href="{% url 'demo' %}">デモを開始する</a>を利用してください。   
+        </span>
+    </p>
     <br>
 </div>
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    <p>.htmlもしくは.txtファイルを指定できます。</p>
-
     {% if form.original_file.errors %}
         <div class="ui warning message">
             <ul>
@@ -40,4 +44,31 @@
     </div>
         <button class="ui primary big button" type="submit">アップロード</button>
 </form>
+
+<br>
+<div class="ui segment"'>
+    <p>
+        付与される品詞については以下を参照ください。
+    </p>
+    <div class="ui text container">
+        <table class="ui celled table">
+            <tr>
+                <td>NOUN</td>
+                <td>名詞</td>
+            </tr>
+            <tr>
+                <td>VERB</td>
+                <td>動詞</td>
+            </tr>
+            <tr>
+                <td>ADJECTIVE</td>
+                <td>形容詞</td>
+            </tr>
+            <tr>
+                <td>ADVERB</td>
+                <td>副詞</td>
+            </tr>
+        </table>
+    </div>  
+    </div>
 {% endblock %}
