@@ -1,7 +1,9 @@
 from django_pandas.io import read_frame
 
-from tasks.models import Task, Word
+from tasks.models import Task
+from morphogical_analyzer.models import Word
 from wordbook_generator.settings.base import MEDIA_ROOT
+
 
 class Serializer:
     df = None

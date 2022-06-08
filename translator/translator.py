@@ -3,7 +3,7 @@ from typing import List
 from bs4 import BeautifulSoup
 import requests
 
-from tasks.models import Morph
+from morphogical_analyzer.models import Morph
 
 
 class Translator:

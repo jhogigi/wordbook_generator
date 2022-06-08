@@ -24,8 +24,10 @@ INSTALLED_APPS = [
     'django_celery_results',
 
     'file_manager',
+    'morphogical_analyzer',
     'tasks',
-    'apiv1'
+    'apiv1',
+    'web'
 ]
 
 MIDDLEWARE = [

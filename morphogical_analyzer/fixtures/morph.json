@@ -1,6 +1,6 @@
 [
       {
-        "model": "tasks.Morph",
+        "model": "morphogical_analyzer.Morph",
         "pk": 1,
         "fields": {
               "wordname": "fire",
@@ -9,7 +9,7 @@
         }
       },
       {
-          "model": "tasks.Morph",
+          "model": "morphogical_analyzer.Morph",
           "pk": 2,
           "fields": {
                 "wordname": "fire",
@@ -18,7 +18,7 @@
           }
       },
       {
-          "model": "tasks.Morph",
+          "model": "morphogical_analyzer.Morph",
           "pk": 3,
           "fields": {
                 "wordname": "cat",

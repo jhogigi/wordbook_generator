@@ -5,7 +5,7 @@ from django.views.generic import View, TemplateView
 from django.shortcuts import render, redirect
 import pandas as pd
 
-from file_manager.forms import UploadFileForm
+from web.forms import UploadFileForm
 from tasks.models import Task
 from tasks.app import get_task_chain
 from wordbook_generator.settings.base import MEDIA_URL
@@ -14,7 +14,7 @@ from wordbook_generator.settings.base import MEDIA_URL
 class FileManagerView(View):
     def get(self, request, *args, **kwargs):
         form = UploadFileForm()
-        return render(request, 'file_manager/upload.html', {'form': form})
+        return render(request, 'web/upload.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = UploadFileForm(request.POST, request.FILES)
@@ -29,12 +29,12 @@ class FileManagerView(View):
             task.async_result_id = async_result.task_id
             task.save()
             return redirect(f'/waiting_task/{task.id}/')
-        return render(request, 'file_manager/upload.html', {'form': form})
+        return render(request, 'web/upload.html', {'form': form})
 
 
 class DemoView(View):
     def get(self, request, *args, **kwargs):
-        return render(request, 'file_manager/demo.html')
+        return render(request, 'web/demo.html')
 
     def post(self, request, *args, **kwargs):
         task = Task.objects.create(original_file_path="alice.html")
@@ -47,7 +47,7 @@ class DemoView(View):
 
 
 class WaitingTaskPage(TemplateView):
-    template_name ='file_manager/waiting_task.html'
+    template_name ='web/waiting_task.html'
 
     def get_context_data(self, task_id, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -56,7 +56,7 @@ class WaitingTaskPage(TemplateView):
 
 
 class ResultTaskPage(TemplateView):
-    template_name = 'file_manager/result_task.html'
+    template_name = 'web/result_task.html'
 
     def get_context_data(self, task_id, **kwargs):
         task = Task.objects.get(id=task_id)

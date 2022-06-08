@@ -1,31 +1,8 @@
-import os
-
 from django.test import TestCase
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 
 from file_manager.file_manager import FileManager
-from tasks.models import Task
-
-
-class FileManagerViewTest(TestCase):
-    def test_upload(self):
-        with open('file_manager/test.html', 'w') as f:
-            f.write('ABC')
-        with open('file_manager/test.html') as f:
-            response = self.client.post('', {'original_file': f})
-        os.remove('file_manager/test.html')
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(Task.objects.all().count(), 1)
-
-    def test_cannot_upload_css_file(self):
-        with open('file_manager/test.css', 'w') as f:
-            f.write('ABC')
-        with open('file_manager/test.css') as f:
-            response = self.client.post('', {'original_file': f})
-        os.remove('file_manager/test.css')
-        self.assertTrue(response.status_code, 200)
-        self.assertEqual(Task.objects.all().count(), 0)
 
 
 class FileManagerTest(TestCase):

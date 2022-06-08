@@ -2,8 +2,9 @@ from unittest import mock
 
 from django.test import TestCase
 
-from tasks.models import Task, Morph
-from tasks.translator import Translator
+from tasks.models import Task
+from morphogical_analyzer.models import Morph
+from translator.translator import Translator
 
 
 class TranslatorTest(TestCase):
@@ -12,7 +13,7 @@ class TranslatorTest(TestCase):
     def setUp(self):
         self.task = Task.objects.get(original_file_path="dummy_path1")
 
-    @mock.patch('tasks.translator.Translator._translate')
+    @mock.patch('translator.translator.Translator._translate')
     def test_translate(self, _translate):
         _translate.side_effect = ['ねこ', 'いぬ']
 

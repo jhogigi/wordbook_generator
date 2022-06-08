@@ -1,6 +1,6 @@
 [
     {
-      "model": "tasks.Word",
+      "model": "morphogical_analyzer.Word",
       "pk": "c5ecbde1-cbf4-11e5-a759-6096cb800001",
       "fields": {
             "morph": 1,
@@ -9,7 +9,7 @@
       }
     },
     {
-        "model": "tasks.Word",
+        "model": "morphogical_analyzer.Word",
         "pk": "c5ecbde1-cbf4-11e5-a759-6096cb800002",
         "fields": {
               "morph": 2,
@@ -18,7 +18,7 @@
         }
       },
       {
-        "model": "tasks.Word",
+        "model": "morphogical_analyzer.Word",
         "pk": "c5ecbde1-cbf4-11e5-a759-6096cb800004",
         "fields": {
               "morph": 3,

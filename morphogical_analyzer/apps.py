@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class FileManagerConfig(AppConfig):
+class MorphogicalAnalyzerConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'file_manager'
+    name = 'morphogical_analyzer'

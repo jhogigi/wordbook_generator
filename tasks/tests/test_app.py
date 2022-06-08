@@ -12,7 +12,7 @@ class TestTaskApp(TestCase):
     def setUp(self):
         self.task = Task.objects.create(original_file_path="dummy")
 
-    @mock.patch('tasks.html_parser.HtmlParser.remove_noise')
+    @mock.patch('html_parser.html_parser.HtmlParser.remove_noise')
     def test_call_htmlparser(self, remove_noise):
         remove_noise.return_value = 'write_path'
         
@@ -20,7 +20,7 @@ class TestTaskApp(TestCase):
         expected = (self.task.id, 'write_path')
         self.assertEqual(expected, actual)
 
-    @mock.patch('tasks.morphogical_analyzer.MorphogicalAnalyzer.start_normalize')
+    @mock.patch('morphogical_analyzer.morphogical_analyzer.MorphogicalAnalyzer.start_normalize')
     def test_call_morphogical_analyzer(self, start_normalize):
         start_normalize.return_value = self.task.id
         args = (self.task.id, 'dummy') 
@@ -28,7 +28,7 @@ class TestTaskApp(TestCase):
         expected = self.task.id
         self.assertEqual(expected, actual)
 
-    @mock.patch('tasks.translator.Translator.translate')
+    @mock.patch('translator.translator.Translator.translate')
     def test_call_translater(self, translate):
         translate.return_value = self.task.id
         
@@ -37,7 +37,7 @@ class TestTaskApp(TestCase):
         expected = self.task.id
         self.assertEqual(expected, actual)
 
-    @mock.patch('tasks.serializer.Serializer.serialize')
+    @mock.patch('serializer.serializer.Serializer.serialize')
     def test_call_serializer(self, serialize):
         serialize.return_value = 'dummy'
         
@@ -48,7 +48,7 @@ class TestTaskApp(TestCase):
     def test_save_output_file_path(self):
         file_path = '/var/www/wordbookge/media/aaa.csv'
         args = (self.task.id, file_path)
-        actual =  save_output_file_path(args)
+        actual = save_output_file_path(args)
         expected = self.task.id
         self.assertEqual(expected, actual)
         res = Task.objects.get(id=self.task.id).output_file_path

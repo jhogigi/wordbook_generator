@@ -9,7 +9,7 @@ from nltk.tag import pos_tag
 from nltk.tokenize import word_tokenize
 
 from file_manager.file_manager import FileManager
-from tasks.models import Morph, Task, Word
+from morphogical_analyzer.models import Morph, Word
 
 
 class MorphogicalAnalyzer:

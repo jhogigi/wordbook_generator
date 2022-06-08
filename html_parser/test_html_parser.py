@@ -8,7 +8,7 @@ from django.core.files.storage import default_storage
 from django.core.files.base import ContentFile
 
 from wordbook_generator.settings.base import MEDIA_ROOT
-from tasks.html_parser import HtmlParser
+from html_parser.html_parser import HtmlParser
 from tasks.models import Task
 
 
@@ -24,7 +24,7 @@ class HtmlParserTest(TestCase):
         shutil.rmtree(MEDIA_ROOT)
         os.mkdir(MEDIA_ROOT)
 
-    @mock.patch('tasks.html_parser.HtmlParser._remove_noise')
+    @mock.patch('html_parser.html_parser.HtmlParser._remove_noise')
     def test_remove_noise(self, _remove_noise):
         # BeautifulSoup依存部分にモックをパッチする
         _remove_noise.return_value = ["test dummy text"]
@@ -33,7 +33,7 @@ class HtmlParserTest(TestCase):
         with default_storage.open(write_path) as f:
             self.assertEqual(f.read(), b'test dummy text')
 
-    @mock.patch('tasks.html_parser.HtmlParser._remove_noise_from_line')
+    @mock.patch('html_parser.html_parser.HtmlParser._remove_noise_from_line')
     def test_private_remove_noise(self, _remove_noise_from_line):
         _remove_noise_from_line.return_value = 'dummy text'
 

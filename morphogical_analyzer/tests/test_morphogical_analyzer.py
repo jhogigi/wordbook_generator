@@ -8,8 +8,9 @@ from django.core.files.base import ContentFile
 from django.test import TestCase
 
 from wordbook_generator.settings.base import MEDIA_ROOT
-from tasks.morphogical_analyzer import MorphogicalAnalyzer
-from tasks.models import Morph, Task, Word
+from morphogical_analyzer.morphogical_analyzer import MorphogicalAnalyzer
+from tasks.models import Task
+from morphogical_analyzer.models import Morph, Word
 
 
 class MorphogicalAnalyzerTest(TestCase):
@@ -22,10 +23,10 @@ class MorphogicalAnalyzerTest(TestCase):
         shutil.rmtree(MEDIA_ROOT)
         os.mkdir(MEDIA_ROOT)
 
-    @mock.patch('tasks.morphogical_analyzer.MorphogicalAnalyzer._replace_tag_with_parts_of_speech_str')
-    @mock.patch('tasks.morphogical_analyzer.MorphogicalAnalyzer._normalize')
-    @mock.patch('tasks.morphogical_analyzer.MorphogicalAnalyzer._tokenize_text')
-    @mock.patch('tasks.morphogical_analyzer.pos_tag')
+    @mock.patch('morphogical_analyzer.morphogical_analyzer.MorphogicalAnalyzer._replace_tag_with_parts_of_speech_str')
+    @mock.patch('morphogical_analyzer.morphogical_analyzer.MorphogicalAnalyzer._normalize')
+    @mock.patch('morphogical_analyzer.morphogical_analyzer.MorphogicalAnalyzer._tokenize_text')
+    @mock.patch('morphogical_analyzer.morphogical_analyzer.pos_tag')
     def test_start_normalize(self, pos_tag, _tokenize_text, _normalize, _replace_t_with_p):
         # privateの部分はモックをパッチする
         pos_tag.return_value = [

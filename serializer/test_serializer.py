@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.core.files.storage import default_storage
 
 from wordbook_generator.settings.base import MEDIA_ROOT 
-from tasks.serializer import Serializer
+from serializer.serializer import Serializer
 from tasks.models import Task
 
 
@@ -20,7 +20,7 @@ class SerializerTest(TestCase):
         shutil.rmtree(MEDIA_ROOT)
         os.mkdir(MEDIA_ROOT)
 
-    @mock.patch('tasks.serializer.Serializer._to_csv')
+    @mock.patch('serializer.serializer.Serializer._to_csv')
     def test_serialize(self, _to_csv):
         s = Serializer(self.task.id)
         s.serialize()

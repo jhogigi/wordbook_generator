@@ -2,11 +2,12 @@ from typing import Tuple
 import uuid
 
 from celery import shared_task, chain
-from tasks.models import Task, Morph
-from tasks.html_parser import HtmlParser
-from tasks.morphogical_analyzer import MorphogicalAnalyzer
-from tasks.translator import Translator
-from tasks.serializer import Serializer
+from tasks.models import Task
+from morphogical_analyzer.models import Morph
+from html_parser.html_parser import HtmlParser
+from morphogical_analyzer.morphogical_analyzer import MorphogicalAnalyzer
+from translator.translator import Translator
+from serializer.serializer import Serializer
 
 
 def get_task_chain(task_id: uuid):

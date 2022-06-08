@@ -1,7 +1,7 @@
 from django.urls import path
 
-from file_manager.views import FileManagerView, DemoView
-from file_manager.views import WaitingTaskPage, ResultTaskPage
+from web.views import FileManagerView, DemoView
+from web.views import WaitingTaskPage, ResultTaskPage
 
 
 urlpatterns = [
