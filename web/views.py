@@ -7,7 +7,7 @@ import pandas as pd
 
 from web.forms import UploadFileForm
 from tasks.models import Task
-from tasks.app import get_task_chain
+from tasks.tasks import get_task_chain
 from wordbook_generator.settings.base import MEDIA_URL
 
 

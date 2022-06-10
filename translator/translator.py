@@ -9,6 +9,8 @@ from morphogical_analyzer.models import Morph
 class Translator:
     @classmethod
     def translate(cls, new_morph: List[Morph]) -> None:
+        """リストで受け取ったMorphオブジェクトについて一括で語義を取得します。
+        """
         def _func(morph_list):
             meanings = []
             for morph in morph_list:
@@ -19,10 +21,11 @@ class Translator:
 
     @staticmethod
     def _translate(wordname: str) -> str:
+        """単語の意味を調べます。
+        """
         scrape_url = 'https://ejje.weblio.jp/content/'
         res = requests.get(scrape_url + wordname)
         soup = BeautifulSoup(res.text, 'html.parser')
         if meaning_html := soup.find(class_='content-explanation'):
             return meaning_html.get_text()
         return None
-        

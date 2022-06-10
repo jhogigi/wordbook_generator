@@ -30,6 +30,26 @@ class Morph(models.Model):
         for id in target_morph_id_list:
             Morph.objects.get(id=id).delete()
 
+    @classmethod
+    def register_only_new_ones(cls, wordname, pos):
+        """Morphオブジェクトを複合ユニーク制約にしたがって生成します。
+        新しく生成した場合のみオブジェクトを返します。
+        """
+        morph = None
+        if not (wordname and pos):
+            return None
+        try:
+            morph = Morph.objects.get(
+                wordname=wordname, parts_of_speech=pos)
+        except Morph.DoesNotExist:
+            morph = Morph.objects.create(
+                wordname=wordname,
+                meaning=None,
+                parts_of_speech=pos
+            )
+            return morph
+        return None
+
 
 class Word(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)

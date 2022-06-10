@@ -2,7 +2,7 @@ from unittest import mock
 
 from django.test import TestCase
 
-from tasks.app import call_htmlparser, call_translator, call_serializer, save_output_file_path
+from tasks.tasks import call_htmlparser, call_translator, call_serializer, save_output_file_path
 from tasks.models import Task
 
 
