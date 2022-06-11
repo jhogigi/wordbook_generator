@@ -1,15 +1,6 @@
-import datetime
-import shutil
-import os
-from unittest import mock
-
 from django.test import TestCase
-from django.core.files.storage import default_storage
-from django.core.files.base import ContentFile
 
-from wordbook_generator.settings.base import MEDIA_ROOT
 from html_parser.html_parser import HtmlParser
-from tasks.models import Task
 
 
 class HtmlParserTest(TestCase):
