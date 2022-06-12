@@ -6,14 +6,14 @@ Managerクラスを定義しています。
 各クラスのpublicメソッドはタスクを実行するエンドポイント(tasks/tasks.py)から
 直接実行されます。
 """
-
+from typing import List
 from collections import Counter
 
 from file_manager.file_manager import FileManager
 from html_parser.html_parser import HtmlParser
 from morphogical_analyzer.morph_data_provider import MorphDataProvider
-from tasks.models import Task, Word
-from morphogical_analyzer.models import Morph
+from tasks.models import Task
+from morphogical_analyzer.models import Morph, Word
 from translator.translator import Translator
 
 
