@@ -6,8 +6,9 @@ Managerクラスを定義しています。
 各クラスのpublicメソッドはタスクを実行するエンドポイント(tasks/tasks.py)から
 直接実行されます。
 """
-from typing import List
 from collections import Counter
+from typing import List
+import uuid
 
 from file_manager.file_manager import FileManager
 from html_parser.html_parser import HtmlParser

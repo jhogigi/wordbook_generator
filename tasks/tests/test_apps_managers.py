@@ -3,8 +3,9 @@ import tempfile
 import shutil
 
 from django.test import TestCase
+from morphogical_analyzer.models import Word
 
-from tasks.app_managers import HtmlParserManager
+from tasks.app_managers import HtmlParserManager, MorphogicalAnalyzerManager
 from tasks.models import Task
 from wordbook_generator.settings.base import MEDIA_ROOT
 
@@ -40,4 +41,37 @@ class HtmlParserManagerTest(TestCase):
         os.mkdir(MEDIA_ROOT)
 
 
-class 
+class MorphogicalAnalyzerManagerTest(TestCase):
+    """MorphogicalAnalyzerManagerのテスト
+    """
+    def test_analyze_from_file(self):
+        """一連の流れのテスト
+        詳細な形態素解析のテストはMorphogicalAnalyzerにて実行
+
+        the dog is running around
+        -> dog, run, aroundを登録するかどうか
+
+        new_morphを返すかどうか
+        """
+        # 準備
+        file = tempfile.NamedTemporaryFile(dir=MEDIA_ROOT)
+        file.write(b'The dog is running around')
+        file.seek(0)
+        task = Task.objects.create(original_file_path='')
+
+        # 実行
+        new_morph = MorphogicalAnalyzerManager.analyze_from_file(file.name, task.id)
+
+        # テスト
+        words = Word.objects.all()
+        self.assertEqual(words[0].morph.wordname, 'dog')
+        self.assertEqual(words[1].morph.wordname, 'run')
+        self.assertEqual(words[2].morph.wordname, 'around')
+
+        self.assertEqual(len(new_morph), 3)
+
+        # 後処理
+        file.close()
+        shutil.rmtree(MEDIA_ROOT)
+        os.mkdir(MEDIA_ROOT)
+
