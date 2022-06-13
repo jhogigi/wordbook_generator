@@ -75,3 +75,12 @@ class MorphogicalAnalyzerManagerTest(TestCase):
         shutil.rmtree(MEDIA_ROOT)
         os.mkdir(MEDIA_ROOT)
 
+
+class TranslatorManagerTTest(TestCase):
+    """TranslatorManagerクラスのテスト
+    翻訳の詳細実装はTranslatorクラスでテストする
+    """
+    # TranslatorがMorphを更新するかどうかはすでにテスト済みで
+    # Morphのリストをただバケツリレーさせているだけなので
+    # 必要に迫られたらテストを追加する。
+    pass
