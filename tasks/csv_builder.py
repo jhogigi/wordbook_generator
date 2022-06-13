@@ -45,5 +45,5 @@ class CSVBuilder:
         write_path = f'{MEDIA_ROOT}/{self.task_id}.csv'
         df = self.df.dropna(how='any', axis=0)
         df = df.sort_values('frequency', ascending=False)
-        df.to_csv(write_path)
+        df.to_csv(write_path, index=False)
         return write_path
