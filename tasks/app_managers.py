@@ -66,9 +66,17 @@ class MorphogicalAnalyzerManager:
         # 次の翻訳タスクに渡す新規Morphのリストを作る。
         new_morph_ids = []
         for analyzed_morph, freq in analyzed_words:
-            morph = Morph.register_only_new_ones(*analyzed_morph)
-            if morph:
+            result = Morph.register_only_new_ones(*analyzed_morph)
+            
+            # wordnameかposが不正な場合、次の単語へ
+            if not result:
+                continue
+            
+            # 新しく生成されたMorphの場合、リストに追加する
+            morph, is_new = result
+            if is_new:
                 new_morph_ids.append(morph.id)
+
             # タスク内で扱うWordオブジェクトを登録する。
             Word.objects.create(
                 morph=morph,

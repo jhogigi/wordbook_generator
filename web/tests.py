@@ -5,7 +5,7 @@ from django.test import TestCase
 from tasks.models import Task
 
 
-class FileManagerViewTest(TestCase):
+class FileUploadViewTest(TestCase):
     def test_upload(self):
         with open('web/test.html', 'w') as f:
             f.write('ABC')

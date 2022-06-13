@@ -11,7 +11,9 @@ from tasks.tasks import get_task_chain
 from wordbook_generator.settings.base import MEDIA_URL
 
 
-class FileManagerView(View):
+class FileUploadView(View):
+    """ファイルアップロード画面のViewクラス
+    """
     def get(self, request, *args, **kwargs):
         form = UploadFileForm()
         return render(request, 'web/upload.html', {'form': form})
@@ -33,6 +35,8 @@ class FileManagerView(View):
 
 
 class DemoView(View):
+    """デモページのViewクラス
+    """
     def get(self, request, *args, **kwargs):
         return render(request, 'web/demo.html')
 
@@ -47,7 +51,11 @@ class DemoView(View):
 
 
 class WaitingTaskPage(TemplateView):
-    template_name ='web/waiting_task.html'
+    """タスク実行後にタスクの終了を待機する静的なページ
+    タスクのステータスの取得は
+    apiv1アプリケーションのエンドポイントへAJAXでポーリングします。
+    """
+    template_name = 'web/waiting_task.html'
 
     def get_context_data(self, task_id, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -56,15 +64,17 @@ class WaitingTaskPage(TemplateView):
 
 
 class ResultTaskPage(TemplateView):
+    """タスク実行結果を確認するページViewクラス
+    """
     template_name = 'web/result_task.html'
 
     def get_context_data(self, task_id, **kwargs):
         task = Task.objects.get(id=task_id)
-        df = pd.read_csv(task.output_file_path, index_col=0)
-        now= datetime.datetime.now()
+        df = pd.read_csv(task.output_file_path)
+        now = datetime.datetime.now()
 
         ctx = super().get_context_data(**kwargs)
-        file_path =  task.output_file_path.replace('/var/www/wordbookge/media/', '')
+        file_path = task.output_file_path.replace('/var/www/wordbookge/media/', '')
         ctx['csv_download_path'] = f'{MEDIA_URL}{file_path}'
         ctx['csv_download_name'] = f'{now}.csv'
         ctx['data'] = df.head(50).to_dict(orient="records")
