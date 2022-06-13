@@ -39,6 +39,28 @@ class MorphTest(TestCase):
         Morph.delete_by_apply_function(target_morph, _func)
         self.assertEqual(1, Morph.objects.all().count())
 
+    # register_only_new_onesのテスト
+    def test_do_not_register_already_exists_morph(self):
+        """すでに存在しているMorphは生成しない
+        戻り値はFalse
+        """
+        Morph.objects.create(wordname='dog', parts_of_speech='NOUN')
+        actual = Morph.register_only_new_ones(wordname='dog', pos='NOUN')
+        self.assertFalse(actual[1])
+
+    def test_register_new_morph(self):
+        """新しいMorphは生成する。
+        戻り値はTrue
+        """
+        actual = Morph.register_only_new_ones(wordname='dog', pos='NOUN')
+        self.assertTrue(actual[1])
+
+    def test_do_not_register_error_values(self):
+        """wordname, posのどちらかが不正な値の場合Noneを返す
+        """
+        actual = Morph.register_only_new_ones(wordname='', pos='')
+        self.assertEqual(None, actual)
+
 
 class WordTest(TestCase):
     fixtures = ['words.json', 'morph.json', 'tasks.json']

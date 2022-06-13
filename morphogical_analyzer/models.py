@@ -33,9 +33,11 @@ class Morph(models.Model):
     @classmethod
     def register_only_new_ones(cls, wordname, pos):
         """Morphオブジェクトを複合ユニーク制約にしたがって生成します。
-        新しく生成した場合のみオブジェクトを返します。
+        戻り値はタプルで、
+            すでに存在しているオブジェクトの場合、オブジェクトとFalse
+            新しく生成した場合、オブジェクトとTrueを返します。
+        エラーの場合Noneを返します。
         """
-        morph = None
         if not (wordname and pos):
             return None
         try:
@@ -47,8 +49,8 @@ class Morph(models.Model):
                 meaning=None,
                 parts_of_speech=pos
             )
-            return morph
-        return None
+            return (morph, True)
+        return (morph, False)
 
 
 class Word(models.Model):
