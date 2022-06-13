@@ -64,18 +64,18 @@ class MorphogicalAnalyzerManager:
         )
 
         # 次の翻訳タスクに渡す新規Morphのリストを作る。
-        new_morph = []
+        new_morph_ids = []
         for analyzed_morph, freq in analyzed_words:
             morph = Morph.register_only_new_ones(*analyzed_morph)
             if morph:
-                new_morph.append(morph)
+                new_morph_ids.append(morph.id)
             # タスク内で扱うWordオブジェクトを登録する。
             Word.objects.create(
                 morph=morph,
                 task=task,
                 frequency=freq
             )
-        return new_morph
+        return new_morph_ids
 
     @staticmethod
     def _count_frequency_of_words_appearance(words):
@@ -95,5 +95,10 @@ class TranslatorManager:
     """translatorパッケージの窓口クラスです。
     """
     @staticmethod
-    def translate(morph_list):
-        Translator.translate(morph_list)
+    def translate(new_morph_ids):
+        """新たに出現したMorphの語義を取得します。
+        """
+        new_morph = []
+        for id in new_morph_ids:
+            new_morph.append(Morph.objects.get(id=id))
+        Translator.translate(new_morph)

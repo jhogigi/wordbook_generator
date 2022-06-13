@@ -76,7 +76,7 @@ class MorphogicalAnalyzerManagerTest(TestCase):
         os.mkdir(MEDIA_ROOT)
 
 
-class TranslatorManagerTTest(TestCase):
+class TranslatorManagerTest(TestCase):
     """TranslatorManagerクラスのテスト
     翻訳の詳細実装はTranslatorクラスでテストする
     """
