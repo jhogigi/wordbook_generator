@@ -1,14 +1,20 @@
+import logging
 from typing import Tuple
 import uuid
 
 from celery import shared_task, chain
+from celery.utils.log import get_task_logger
 from tasks.models import Task
 
 from tasks.app_managers import HtmlParserManager, MorphogicalAnalyzerManager, TranslatorManager
 from tasks.csv_builder import CSVBuilder
 
 
+logger = get_task_logger(__name__)
+
+
 def get_task_chain(task_id: uuid):
+    logger.info('タスクチェーンを開始しました。Task=%s', task_id)
     return chain(
         call_htmlparser.s(task_id),
         call_morpohgical_analyzer.s(),
@@ -37,7 +43,8 @@ def call_morpohgical_analyzer(args: Tuple) -> Tuple:
     task = Task.objects.get(id=task_id)
     task.status_detail = "出現する単語を調べて正規化処理を行っています。"
     task.save()
-    new_morph_ids = MorphogicalAnalyzerManager.analyze_from_file(file_path, task.id)
+    new_morph_ids = MorphogicalAnalyzerManager.analyze_from_file(
+        file_path, task.id)
     return task_id, new_morph_ids
 
 
@@ -49,7 +56,7 @@ def call_translator(args: Tuple) -> uuid:
     task = Task.objects.get(id=task_id)
     task.status_detail = "単語の意味を取得しています。"
     task.save()
-    TranslatorManager.translate(new_morph_ids)
+    TranslatorManager.translate(task_id, new_morph_ids)
     return task_id
 
 
@@ -60,8 +67,10 @@ def call_csv_builder(task_id: uuid) -> str:
     task = Task.objects.get(id=task_id)
     task.status_detail = "csvファイルを作成しています。"
 
+    logger.info('csvファイルの生成を開始します。Task=%s', task_id)
     csv_builder = CSVBuilder(task_id)
     write_path = csv_builder.build()
+    logger.info('csvファイルの生成が完了しました。Path=%s Task=%s', write_path, task_id)
 
     task.output_file_path = write_path
     task.save()
@@ -77,4 +86,5 @@ def finish_chain_tasks(task_id: uuid) -> uuid:
     task = Task.objects.get(id=task_id)
     task.status_detail = "完了"
     task.save()
+    logger.info('すべてのタスクチェーンが完了しました。Task=%s', task_id)
     return task_id

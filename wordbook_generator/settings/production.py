@@ -15,26 +15,26 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-        'production': {
-            'format': '%(asctime)s [%(levelname)s] %(process)d %(thread)d %(pathname)s:%(lineno)d %(message)s'
+        'default': {
+            'format': '%(asctime)s [%(levelname)s] %(message)s プロセス=%(process)d スレッド=%(thread)d %(pathname)s:%(lineno)d'
         },
     },
     'handlers': {
-        'file': {
+        'production': {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': '/var/log/wordbookge/app.log',
-            'formatter': 'production',
+            'format': 'default'
         }
     },
     'loggers': {
         '': {
-            'handlers': ['file'],
+            'handlers': ['production'],
             'level': 'INFO',
             'propagate': False,
         },
         'django': {
-            'handlers': ['file'],
+            'handlers': ['production'],
             'level': 'INFO',
             'propagate': False
         }
