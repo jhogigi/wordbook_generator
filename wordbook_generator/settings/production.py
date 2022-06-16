@@ -24,7 +24,7 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'filename': '/var/log/wordbookge/app.log',
-            'format': 'default'
+            'formatter': 'default'
         }
     },
     'loggers': {
