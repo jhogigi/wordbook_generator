@@ -3,12 +3,12 @@ from typing import List
 from bs4 import BeautifulSoup
 import requests
 
-from morphogical_analyzer.models import Morph
+from repository.i_morph_repository import IMorphRepository
 
 
 class Translator:
     @classmethod
-    def translate(cls, new_morph: List[Morph]) -> None:
+    def translate(cls, morph_repository: IMorphRepository, new_morph: List) -> None:
         """リストで受け取ったMorphオブジェクトについて一括で語義を取得します。
         """
         def _func(morph_list):
@@ -17,7 +17,7 @@ class Translator:
                 morph.meaning = cls._translate(morph.wordname)
                 meanings.append(morph)
             return meanings
-        Morph.bulk_update_by_apply_function(new_morph, 'meaning', _func)
+        morph_repository.bulk_update_by_apply_function(new_morph, 'meaning', _func)
 
     @staticmethod
     def _translate(wordname: str) -> str:
