@@ -1,5 +1,5 @@
 from unittest import mock
-from repository.i_morph_repository import IMorphRepository
+from domain.repository.i_morph_repository import IMorphRepository
 from translator.translator import Translator
 
 

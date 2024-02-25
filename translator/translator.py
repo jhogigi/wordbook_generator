@@ -3,7 +3,7 @@ from typing import List
 from bs4 import BeautifulSoup
 import requests
 
-from repository.i_morph_repository import IMorphRepository
+from domain.repository.i_morph_repository import IMorphRepository
 
 
 class Translator:
